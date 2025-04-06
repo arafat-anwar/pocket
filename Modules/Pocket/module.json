@@ -1,0 +1,13 @@
+{
+    "name": "Pocket",
+    "alias": "pocket",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Pocket\\Providers\\PocketServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

@@ -1,0 +1,13 @@
+{
+    "name": "Peoples",
+    "alias": "peoples",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Peoples\\Providers\\PeoplesServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
