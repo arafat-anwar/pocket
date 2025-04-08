@@ -22,6 +22,7 @@ Route::prefix('setups')->group(function() {
 
     Route::resource('countries', 'CountryController');
     Route::resource('cities', 'CityController');
+    Route::resource('entry-types', 'EntryTypeController');
 
     Route::resource('switch-language', 'SwitchLanguageController');
 });

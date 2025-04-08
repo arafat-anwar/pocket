@@ -10,6 +10,8 @@ class EntryType extends Model
     	'name',
         'sign',
         'color',
+        'positive',
+        'icon',
         'desc',
         'status',
     ];
