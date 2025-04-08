@@ -1,6 +1,15 @@
 @extends('pocket::layouts.index')
 @section('content')
 
+<style>
+    input[type="date"]::-ms-clear {
+        display: none !important;
+    }
+
+    input[type="date"]::-webkit-clear-button {
+        display: none !important;
+    }
+</style>
 @include('pocket::layouts.content-header', [
     'header' => [
         'title' => $title,
@@ -21,7 +30,7 @@
               </div>
               <div class="card-body" style="padding:5px 0px 5px 0px;margin: 0">
                   <div class="form-group col-md-8 offset-md-2 text-center" style="margin-bottom: 0px">
-                      <input type="date" class="text-center" id="filter_entry_date" name="filter_entry_date" value="{{date('Y-m-d')}}" style="width: 90%" onchange="filterEntry()">
+                      <input type="date" class="text-center" id="filter_entry_date" name="filter_entry_date" value="{{ date('Y-m-d') }}" style="width: 90%" onchange="filterEntry()">
                   </div>
               </div>
               
@@ -119,34 +128,8 @@
   </div>
   
   <div class="container">
-      <div class="row">
-          <div class="col-md-4">
-              <div class="card card-default">
-                  <div class="card-header bg-info">
-                      <strong>Previous Year's Pocket</strong>
-                      <br> 
-                      ({{date("F Y",strtotime('last year January 1st'))}} to {{date("F Y",strtotime('last year December 31st'))}})
-                  </div>
-  
-                  <div id="thisYear" style="height: auto;" class="scroll-to-bottom">
-                      {!! $calculation['previousYear'] !!}
-                  </div>
-              </div>
-          </div>
-          <div class="col-md-4">
-              <div class="card card-default">
-                  <div class="card-header bg-info">
-                      <strong>This Year's Pocket</strong>
-                      <br> 
-                      ({{date("F Y",strtotime('first day of january this year'))}} to {{date("F Y")}})
-                  </div>
-  
-                  <div id="thisYear" style="height: auto;"  class="scroll-to-bottom">
-                      {!! $calculation['thisYear'] !!}
-                  </div>
-              </div>
-          </div>
-          <div class="col-md-4">
+    <div class="row">
+        <div class="col-md-4 mb-4">
             <div class="card card-default">
                 <div class="card-header bg-info">
                     <strong>Yearly Pocket</strong>
@@ -159,6 +142,24 @@
                 </div>
             </div>
         </div>
-      </div>
+
+        @if(count($yearlyPockets) > 0)
+        @foreach($yearlyPockets as $year => $pocket)
+        <div class="col-md-4 mb-4">
+            <div class="card card-default">
+                <div class="card-header bg-info">
+                    <strong>{{ $year }}'s Pocket</strong>
+                    <br> 
+                    ({{ date("F Y",strtotime('last year January 1st '.$year)) }} to {{ date("F Y",strtotime('last year December 31st '.$year)) }})
+                </div>
+
+                <div id="year-{{ $year }}" style="height: auto;" class="scroll-to-bottom">
+                    {!! $pocket !!}
+                </div>
+            </div>
+        </div>
+        @endforeach
+        @endif
+    </div>
   </div>
 @endsection

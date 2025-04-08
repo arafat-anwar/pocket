@@ -19,15 +19,31 @@ class PocketController extends Controller
     public function index()
     {
         $user = auth()->user();
+        
+        $years = $incomes = Entry::where('user_id', auth()->user()->id)
+        ->where('entry_type_id', 1)
+        ->groupBy('year')
+        ->orderBy('year', 'desc')
+        ->get(
+            DB::raw('substr(`date`,1,4) as year'),
+        )
+        ->pluck('year');
+
+        $yearlyPockets = [];
+        if(isset($years[0])){
+            foreach($years as $year){
+                $yearlyPockets[$year] = $this->year($user, $year);
+            }
+        }
+
         return view('pocket::index', [
             'title' => translate("Pocket & Balance"),
             'calculation' => array(
                 'thisWeek' => $this->thisWeek($user),
                 'thisMonth' => $this->thisMonth($user),
-                'previousYear' => $this->year($user,date('Y')-1), 
-                'thisYear' => $this->year($user,date('Y')), 
                 'yearly' => $this->yearly($user), 
-            )
+            ),
+            'yearlyPockets' => $yearlyPockets, 
         ]);
     }
 
@@ -222,39 +238,40 @@ class PocketController extends Controller
         ]);
     }
 
-    public function entryBody($start_date,$end_date)
+    public function entryBody($start_date, $end_date)
     {
-        $type='1';
-        $reverseType=reverseType($type);
-        $title=title($type);
-        $reverseTitle=reverseTitle($type);
-        $entry=Entry::where([
-                'user_id'=>auth()->user()->id,
-                ['date','>=',$start_date],
-                ['date','<=',$end_date],
-            ])
-            ->orderBy('date','desc')
-            ->get();
-        $previous=previousPocket($start_date);
-        $total=$entry->where('entry_type_id',$type)
-            ->sum('amount');
-        $reverseTotal=$entry->where('entry_type_id',$reverseType)
-            ->sum('amount');
+        $type = '1';
+        $reverseType = reverseType($type);
+        $title = title($type);
+        $reverseTitle = reverseTitle($type);
+        $entries = Entry::with([
+            'entryType'
+        ])
+        ->where([
+            'user_id' => auth()->user()->id,
+            ['date', '>=', $start_date],
+            ['date', '<=', $end_date],
+        ])
+        ->orderBy('date', 'desc')
+        ->get();
+        $previous = previousPocket($start_date);
+        $total = $entries->where('entry_type_id',$type)->sum('amount');
+        $reverseTotal = $entries->where('entry_type_id',$reverseType)->sum('amount');
 
         return response()->json([
-            "type"=>$type,
-            "reverseType"=>$reverseType,
-            "title"=>$title,
-            "reverseTitle"=>$reverseTitle,
-            "entry"=>view('pocket::pocket.entry-body', [
-                'entry' => $entry,
+            "type" => $type,
+            "reverseType" => $reverseType,
+            "title"  => $title,
+            "reverseTitle" => $reverseTitle,
+            "entry" => view('pocket::pocket.entry-body', [
+                'entries' => $entries,
             ])->render(),
-            "previous"=>textMoneyFormat($previous),
-            "total"=>moneyFormat($total),
-            "total_sign"=>sign($type),
-            "reverseTotal"=>moneyFormat($reverseTotal),
-            "reverseTotal_sign"=>sign($reverseType),
-            "pocket"=>textMoneyFormat(pocket(explode(' ',$previous)[1],$total,$reverseTotal))
+            "previous" => textMoneyFormat($previous),
+            "total" => moneyFormat($total),
+            "total_sign" => sign($type),
+            "reverseTotal" => moneyFormat($reverseTotal),
+            "reverseTotal_sign" => sign($reverseType),
+            "pocket" => textMoneyFormat(pocket(explode(' ',$previous)[1],$total,$reverseTotal))
         ]);
     }
 

@@ -22,4 +22,8 @@ class Entry extends Model
     function type(){
         return $this->belongsTo(EntryType::class);
     }
+
+    function entryType(){
+        return $this->belongsTo(EntryType::class);
+    }
 }
