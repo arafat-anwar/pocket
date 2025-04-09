@@ -160,6 +160,21 @@
             border-radius: 5px;
             border-bottom: none !important
         }
+
+        .pocket-table th, .pocket-table td{
+            padding-top: 4px !important;
+            padding-bottom: 4px !important;
+            padding-left: 7px !important;
+            padding-right: 7px !important;
+        }
+
+        .pocket-footer-table th, .pocket-footer-table td{
+            border-top: none !important;
+            padding-top: 1px !important;
+            padding-bottom: 1px !important;
+            padding-left: 7px !important;
+            padding-right: 7px !important;
+        }
     </style>
 
     @if(direction() == 'rtl')
