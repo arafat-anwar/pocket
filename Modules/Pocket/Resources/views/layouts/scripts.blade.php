@@ -102,7 +102,7 @@
   }
 
   function playTone(type) {
-      
+
   }
 
   function Show(title,link,style = '') {
@@ -139,7 +139,7 @@
     }, 3000);
 
     filterEntry();
-    
+
     var income_form=$('#income_entry_form');
     var expenses_form=$('#expenses_entry_form');
     var inquiry_form=$('#inquiry_form');
@@ -167,7 +167,7 @@
                     if(response.success){
                         $('#income_entry_title').val('');
                         $('#income_entry_amount').val('');
-                        
+
                         notify('<strong class="text-success">New Income Saved Successfully!</strong>','success');
                         playTone('success');
                         $('#updateAlert').html('<div class="alert alert-success alert-dismissible text-center"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Reports has been updated. <a href="/">Reload Pocket</a> to view updated reports.</strong></div>').fadeIn();
@@ -336,7 +336,35 @@
             }
         });
     });
+
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('#income_entry_title, #incomeTitles, #incomeTitlesClose').length) {
+            $('#incomeTitles').html('');
+            $('#incomeTitlesClose').html('');
+        }
+        if (!$(e.target).closest('#expenses_entry_title, #expenseTitles, #expenseTitlesClose').length) {
+            $('#expenseTitles').html('');
+            $('#expenseTitlesClose').html('');
+        }
+    });
   });
+
+  function changeDateDay(inputId, offset) {
+      var el = document.getElementById(inputId);
+      var current = new Date(el.value);
+      current.setDate(current.getDate() + offset);
+      var y = current.getFullYear();
+      var m = String(current.getMonth() + 1).padStart(2, '0');
+      var d = String(current.getDate()).padStart(2, '0');
+      el.value = y + '-' + m + '-' + d;
+      $(el).trigger('change');
+  }
+
+  function change_filter(inputId) {
+      var date = $('#' + inputId).val();
+      $('#filter_entry_date').val(date);
+      filterEntry();
+  }
 
   function filterEntry() {
       var filter_entry_date=$('#filter_entry_date').val();
@@ -427,7 +455,7 @@
                   text: '<i class="fa fa-ban"></i>&nbsp;&nbsp;No',
                   btnClass: 'btn-default',
                   action: function () {
-                      
+
                   }
               },
           },
@@ -467,12 +495,16 @@
           .done(function(response) {
               var content='';
               if(response.success){
+                  var seen={};
                   $.each(response.entry, function(index, val) {
-                      content+='<li class="list-group-item" id="incomeTitlesItem-'+val.id+'" onclick="printIncomeTitles('+val.id+');" style="padding: 2px 10px;cursor: pointer;">'+val.title+'</li>';
+                      if(!seen[val.title]){
+                          seen[val.title]=true;
+                          content+='<li class="list-group-item" id="incomeTitlesItem-'+val.id+'" onclick="printIncomeTitles('+val.id+');" style="padding: 2px 10px;cursor: pointer;">'+val.title+'</li>';
+                      }
                   });
               }
               title.html(content);
-              close.html('<i class="fa fa-close"></i>');
+              close.html(content ? '<i class="fa fa-close"></i>' : '');
           })
           .fail(function() {
               title.html('');
@@ -503,12 +535,16 @@
           .done(function(response) {
               var content='';
               if(response.success){
+                  var seen={};
                   $.each(response.entry, function(index, val) {
-                      content+='<li class="list-group-item" id="expenseTitlesItem-'+val.id+'" onclick="printExpenseTitles('+val.id+');" style="padding: 2px 10px;cursor: pointer;">'+val.title+'</li>';
+                      if(!seen[val.title]){
+                          seen[val.title]=true;
+                          content+='<li class="list-group-item" id="expenseTitlesItem-'+val.id+'" onclick="printExpenseTitles('+val.id+');" style="padding: 2px 10px;cursor: pointer;">'+val.title+'</li>';
+                      }
                   });
               }
               title.html(content);
-              close.html('<i class="fa fa-close"></i>');
+              close.html(content ? '<i class="fa fa-close"></i>' : '');
           })
           .fail(function() {
               title.html('');
