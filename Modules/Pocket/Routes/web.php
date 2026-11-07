@@ -1,7 +1,5 @@
 <?php
-Route::get('/', function(){
-    return redirect('pocket');
-});
+Route::get('/', 'PocketController@index');
 
 Route::get('change-language/{code}', function($code){
     $language = \Modules\Language\Entities\Language::where('code', $code)->first();
