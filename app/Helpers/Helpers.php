@@ -1,6 +1,41 @@
 <?php
 function systemInformation(){
-    return \Modules\Setups\Entities\SystemInformation::find(1);
+    $info = null;
+    try {
+        $info = \Modules\Setups\Entities\SystemInformation::find(1);
+    } catch (\Throwable $e) {
+    }
+
+    if (!$info) {
+        $info = (object) [
+            'id' => 1,
+            'name' => 'Pocket',
+            'description' => 'Pocket Expense Management',
+            'motto' => 'Pocket',
+            'tagline' => 'Pocket',
+            'phone' => '',
+            'mobile' => '',
+            'address' => '',
+            'email' => 'info@pocket.com',
+            'website' => '',
+            'twitter' => '#',
+            'facebook' => '#',
+            'instagram' => '#',
+            'skype' => '#',
+            'linked_in' => '#',
+            'logo' => 'logo.png',
+            'secondary_logo' => 'logo.png',
+            'icon' => 'icon.png',
+            'show_logo_in_report' => 'no',
+            'test_report_header_left_logo' => '',
+            'test_report_header_right_logo' => '',
+            'test_report_header_title' => '',
+            'test_report_footer' => '',
+            'status' => 1,
+        ];
+    }
+
+    return $info;
 }
 
 function userColumnVisibilities(){

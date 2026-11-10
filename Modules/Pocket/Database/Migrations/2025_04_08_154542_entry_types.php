@@ -11,19 +11,19 @@ class EntryTypes extends Migration
      */
     public function up(): void
     {
-        // Schema::dropIfExists('entry_types');
-        // Schema::create('entry_types', function (Blueprint $table) {
-        //     $table->id();
+        Schema::dropIfExists('entry_types');
+        Schema::create('entry_types', function (Blueprint $table) {
+            $table->id();
 
-        //     $table->string('name');
-        //     $table->string('sign');
-        //     $table->string('color');
-        //     $table->integer('positive')->default(1);
-        //     $table->text('desc')->nullable();
-        //     $table->integer('status')->default(1);
+            $table->string('name');
+            $table->string('sign');
+            $table->string('color');
+            $table->integer('positive')->default(1);
+            $table->text('desc')->nullable();
+            $table->integer('status')->default(1);
 
-        //     $table->timestamps();
-        // });
+            $table->timestamps();
+        });
     }
 
     /**
@@ -31,6 +31,6 @@ class EntryTypes extends Migration
      */
     public function down(): void
     {
-        // Schema::dropIfExists('entry_types');
+        Schema::dropIfExists('entry_types');
     }
 }

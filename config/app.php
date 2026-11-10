@@ -186,7 +186,7 @@ return [
         Mccarlosen\LaravelMpdf\LaravelMpdfServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
+        Fruitcake\LaravelDebugbar\ServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
 
         Milon\Barcode\BarcodeServiceProvider::class,

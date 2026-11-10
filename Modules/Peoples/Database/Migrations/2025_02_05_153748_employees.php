@@ -4,10 +4,11 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Employees extends Migration
+return new class extends Migration
 {
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('employees');
         Schema::create('employees', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -37,10 +38,11 @@ class Employees extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        Schema::enableForeignKeyConstraints();
     }
 
     public function down()
     {
         Schema::dropIfExists('employees');
     }
-}
+};

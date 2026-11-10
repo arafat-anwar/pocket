@@ -9,7 +9,7 @@ class SystemInformation
 {
     public function handle($request, Closure $next, $guard = null)
     {
-        if(!session()->has('system-information')){
+        if(!session()->has('system-information') || is_null(session('system-information'))){
             session()->put('system-information', systemInformation());
         }
 

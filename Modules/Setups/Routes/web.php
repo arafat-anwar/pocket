@@ -1,7 +1,7 @@
 <?php
 
 Route::prefix('setups')->group(function() {
-    Route::resource('/', 'SetupsController');
+    // Route::resource('/', 'SetupsController');
 
     Route::resource('system-information', 'SystemInformationController');
 
